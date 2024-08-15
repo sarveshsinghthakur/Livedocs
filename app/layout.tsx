@@ -6,7 +6,7 @@ import { Metadata } from "next"
 import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 import Provider from "./Provider"
-
+// sarvesh singh
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -43,3 +43,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </ClerkProvider>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sarvesh singh

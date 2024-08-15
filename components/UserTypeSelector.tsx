@@ -31,3 +31,42 @@ const UserTypeSelector = ({userType,setUserType,onClickHandler}:UserTypeSelector
 }
 
 export default UserTypeSelector
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sarvesh singh

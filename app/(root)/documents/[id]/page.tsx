@@ -1,42 +1,96 @@
-import CollaborativeRoom from "@/components/CollaborativeRoom"
+// sarvesh singh
+import CollaborativeRoom from "@/components/CollaborativeRoom";
 import { getDocument } from "@/lib/actions/room.actions";
 import { getClerkUsers } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs/server"
+// sarvesh singh
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-const Document = async ({ params: { id } }: SearchParamProps) => {
-  const clerkUser = await currentUser();
-  if(!clerkUser) redirect('/sign-in');
+const Document = async ({ params: { id } }: { params: { id: string } }) => {
+  try {
+    const clerkUser = await currentUser();
 
-  const room = await getDocument({
-    roomId: id,
-    userId: clerkUser.emailAddresses[0].emailAddress,
-  });
+    if (!clerkUser || !clerkUser.emailAddresses || clerkUser.emailAddresses.length === 0) {
+      redirect('/sign-in');
+      return; 
+    }
 
-  if(!room) redirect('/');
+    const userEmail = clerkUser.emailAddresses[0].emailAddress;
+    if (!userEmail) {
+      redirect('/sign-in');
+      return; 
+    }
 
-  const userIds = Object.keys(room.usersAccesses);
-  const users = await getClerkUsers({ userIds });
+  
+    const room = await getDocument({
+      roomId: id,
+      userId: userEmail,
+    });
 
-  const usersData = users.map((user: User) => ({
-    ...user,
-    userType: room.usersAccesses[user.email]?.includes('room:write')
-      ? 'editor'
-      : 'viewer'
-  }))
+    if (!room) {
+      redirect('/');
+      return; 
+    }
 
-  const currentUserType = room.usersAccesses[clerkUser.emailAddresses[0].emailAddress]?.includes('room:write') ? 'editor' : 'viewer';
+    const userIds = Object.keys(room.usersAccesses);
+    const users = await getClerkUsers({ userIds });
 
-  return (
-    <main className="flex w-full flex-col items-center">
-      <CollaborativeRoom 
-        roomId={id}
-        roomMetadata={room.metadata}
-        users={usersData}
-        currentUserType={currentUserType}
-      />
-    </main>
-  )
-}
+   
+    const usersData = users.map((user: any) => ({
+      ...user,
+      userType: room.usersAccesses[user.email]?.includes('room:write')
+        ? 'editor'
+        : 'viewer'
+    }));
 
-export default Document
+    
+    const currentUserType = room.usersAccesses[userEmail]?.includes('room:write') ? 'editor' : 'viewer';
+// sarvesh singh
+    return (
+      <main className="flex w-full flex-col items-center">
+        <CollaborativeRoom 
+          roomId={id}
+          roomMetadata={room.metadata}
+          users={usersData}
+          currentUserType={currentUserType}
+        />
+      </main>
+    );
+  } catch (error) {
+    console.error('Error fetching document or user data:', error);
+    redirect('/');
+  }
+};
+
+export default Document;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sarvesh singh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sarvesh singh

@@ -1,3 +1,4 @@
+// sarvesh singh
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -94,3 +95,45 @@ export function getUserColor(userId: string) {
   const colorIndex = sum % brightColors.length;
   return brightColors[colorIndex];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sarvesh singh

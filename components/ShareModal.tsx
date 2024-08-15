@@ -14,6 +14,7 @@ import { Label } from '@radix-ui/react-label';
 import { Input } from './ui/input';
 import UserTypeSelector from './UserTypeSelector';
 import Collaborator from './Collaborator';
+import { updateDocumentAccess } from '@/lib/actions/room.actions';
 
   
 const ShareModal = ({roomId,collaborators,creatorId,currentUserType}:ShareDocumentDialogProps) => {
@@ -23,7 +24,16 @@ const [loading, setLoading] = useState(false)
 const [email, setEmail] = useState('')
 const [userType, setUserType] = useState<UserType>("viewer")
 const ShareDocumentHandler = async()=>{
+    setLoading(true);
 
+    await updateDocumentAccess({ 
+      roomId, 
+      email, 
+      userType: userType as UserType, 
+      updatedBy: user.info
+    });
+
+    setLoading(false);
 }
 return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -96,3 +106,57 @@ return (
 }
 
 export default ShareModal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sarvesh singh
