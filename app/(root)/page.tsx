@@ -23,10 +23,10 @@ const Home = async () => {
 
   // let roomDocuments: RoomDocumentsResponse = { data: [] };
   // try {
-  //   roomDocuments = await getDocuments(clerkUser.emailAddresses[0].emailAddress);
-  // } catch (error) {
-  //   console.error('Error fetching documents:', error);
-  // }
+   const roomDocuments = await getDocuments(clerkUser.emailAddresses[0].emailAddress);
+  // catch (error) {
+     //console.error('Error fetching documents:', error);
+   //}
 const documents =[];
   return (
     <main className="home-container">
@@ -38,16 +38,16 @@ const documents =[];
         </div>
       </Header>
 
-      {documents.length > 0 ? (
+      {roomDocuments.data.length > 0 ? (
         <div className="document-list-container">
-          {/* <div className="document-list-title">
+          <div className="document-list-title">
             <h3 className="text-28-semibold">All documents</h3>
             <AddDocumentBtn 
               userId={clerkUser.id}
               email={clerkUser.emailAddresses[0].emailAddress}
             /> 
-          </div> */}
-          {/* <ul className="document-ul">
+          </div>
+          <ul className="document-ul">
             {roomDocuments.data.map(({ id, metadata, createdAt }) => (
               <li key={id} className="document-list-item">
                 <Link href={`/documents/${id}`} className="flex flex-1 items-center gap-4">
@@ -68,7 +68,7 @@ const documents =[];
                 </Link>
               </li>
             ))}
-          </ul> */}
+          </ul>
         </div>
       ) : (
         <div className="document-list-empty">

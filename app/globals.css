@@ -7,7 +7,7 @@
 
 @import '../styles/dark-theme.css';
 
-========================================== TAILWIND STYLES
+/* ========================================== TAILWIND STYLES */
 @layer base {
   :root {
     background: #09111f;
