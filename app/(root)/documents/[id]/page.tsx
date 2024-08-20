@@ -7,6 +7,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 const Document = async ({ params: { id } }: { params: { id: string } }) => {
+  
   try {
     const clerkUser = await currentUser();
 

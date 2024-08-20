@@ -49,6 +49,7 @@ const Home = async () => {
                       height={40}
                     />
                   </div>
+                  
                   <div className="space-y-1">
                     <p className="line-clamp-1 text-lg">{metadata.title}</p>
                     <p className="text-sm font-light text-blue-100">Created about {dateConverter(createdAt)}</p>
