@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     try {
       // Initialize Google Generative AI client
-      const genAI = new GoogleGenerativeAI("AIzaSyAjCMCnYKjxBYlaZy0cSsqv33yp5lhKTPM");
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
       // Get the generative model
       const model = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
