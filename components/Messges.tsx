@@ -4,6 +4,7 @@ import { Bot, User } from "lucide-react";
 
 export default function Message({ message }: { message: MessageType }) {
   const { role, content } = message;
+  
   if (role === "assistant") {
     return (
       <div className="flex flex-col gap-3 p-6 whitespace-pre-wrap">
@@ -11,10 +12,11 @@ export default function Message({ message }: { message: MessageType }) {
           <Bot />
           Assistant:
         </div>
-        {content}
+        <div>{content}</div>
       </div>
     );
   }
+
   return (
     <Card className="whitespace-pre-wrap">
       <CardHeader>

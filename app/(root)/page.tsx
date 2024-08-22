@@ -21,6 +21,20 @@ const Home = async () => {
     <main className="home-container">
       <Header className="sticky left-0 top-0">
         <div className="flex items-center gap-2 lg:gap-4">
+        <div className="document-list">
+              <Link href={`/ai`} className="flex flex-1 items-center gap-4">
+          <Image 
+            src="/assets/icons/openai.png"
+            alt="Document"
+            width={40}
+            height={40}
+            className="mx-4 rounded-circle"
+            
+          />
+
+          
+       </Link>
+        </div>
           <Notifications />
           <SignedIn>
             <UserButton />

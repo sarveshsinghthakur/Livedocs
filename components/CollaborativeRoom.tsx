@@ -103,20 +103,7 @@ const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: Col
             </div>
             <div className="flex w-full flex-1 justify-end gap-2 sm:gap-3">
               <ActiveCollaborators />
-              <div className="document-list">
-              <Link href={`/ai`} className="flex flex-1 items-center gap-4">
-          <Image 
-            src="/assets/icons/openai.png"
-            alt="Document"
-            width={40}
-            height={40}
-            className="mx-4 rounded-circle"
-            
-          />
-
-          
-       </Link>
-        </div>
+              
               <ShareModal
                 roomId={roomId}
                 collaborators={users}
