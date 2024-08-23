@@ -1,39 +1,37 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import fs from "fs";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
-      // Initialize Google Generative AI client
-      const genAI = new GoogleGenerativeAI("AIzaSyAjCMCnYKjxBYlaZy0cSsqv33yp5lhKTPM");
+      // Initialize Google Generative AI client with an API key from the environment variables
+      const genAI = new GoogleGenerativeAI({
+        apiKey: process.env.GEMINI_API_KEY,
+      });
 
-      // Get the generative model
-      const model = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-      // Extract prompt from request body
+      // Extract the prompt from the request body
       const { prompt } = req.body;
 
       if (!prompt) {
         return res.status(400).json({ error: "Prompt is required" });
       }
 
-      // Define the image data (assuming the image is always the same)
-      const image = {
-        inlineData: {
-          data: fs.readFileSync("public/cookie.png").toString("base64"),
-          mimeType: "image/png",
-        },
-      };
+      // Generate text using the prompt
+      const response = await genAI.generateText({
+        model: "models/gemini-1.5-flash", // Ensure the model name is correct
+        prompt: prompt,
+      });
 
-      // Run the prompt and generate content
-      const result = await model.generateContent([prompt, image]);
+      // Check if the response has content
+      if (!response || !response.candidates || response.candidates.length === 0) {
+        throw new Error("Invalid response from generative AI model");
+      }
 
       // Respond with the generated text
-      res.status(200).json({ text: result.response.text() });
+      res.status(200).json({ text: response.candidates[0].output });
     } catch (error) {
       console.error("Error generating content:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
   } else {
     res.setHeader('Allow', ['POST']);

@@ -1,11 +1,9 @@
-"use client";
-
-import { useState } from "react";
+"use client"
+import { useState, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import Message from "@/components/Messges";
-import { useRef } from "react";
 
 export default function Home() {
   const [messages, setMessages] = useState<any[]>([]);
@@ -18,7 +16,7 @@ export default function Home() {
     if (!input.trim()) return;
 
     const userMessage = { id: Date.now(), role: "user", content: input };
-    setMessages([...messages, userMessage]);
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput("");
 
     try {
@@ -30,7 +28,9 @@ export default function Home() {
         body: JSON.stringify({ prompt: input }),
       });
 
-      if (!response.ok) throw new Error("Failed to generate content");
+      if (!response.ok) {
+        throw new Error(`Failed to generate content: ${response.statusText}`);
+      }
 
       const data = await response.json();
       const assistantMessage = {
@@ -38,9 +38,15 @@ export default function Home() {
         role: "assistant",
         content: data.text,
       };
-      setMessages([...messages, userMessage, assistantMessage]);
+      setMessages((prevMessages) => [...prevMessages, userMessage, assistantMessage]);
     } catch (error) {
-      console.error("Error generating content:", error);
+      console.error("Error generating content:", error.message);
+      const errorMessage = {
+        id: Date.now() + 2,
+        role: "system",
+        content: `Error: ${error.message}`,
+      };
+      setMessages((prevMessages) => [...prevMessages, userMessage, errorMessage]);
     }
   }
 
