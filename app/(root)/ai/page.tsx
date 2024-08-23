@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import { useState, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
 import Message from "@/components/Messges";
+import { Send } from "lucide-react";
 
 export default function Home() {
   const [messages, setMessages] = useState<any[]>([]);
@@ -20,12 +20,12 @@ export default function Home() {
     setInput("");
 
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: input }),
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
       });
 
       if (!response.ok) {
@@ -36,9 +36,9 @@ export default function Home() {
       const assistantMessage = {
         id: Date.now() + 1,
         role: "assistant",
-        content: data.text,
+        content: data, // Expecting the text content to be returned directly from the API
       };
-      setMessages((prevMessages) => [...prevMessages, userMessage, assistantMessage]);
+      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
     } catch (error) {
       console.error("Error generating content:", error.message);
       const errorMessage = {
@@ -46,7 +46,7 @@ export default function Home() {
         role: "system",
         content: `Error: ${error.message}`,
       };
-      setMessages((prevMessages) => [...prevMessages, userMessage, errorMessage]);
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
     }
   }
 
