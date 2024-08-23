@@ -40,11 +40,11 @@ export default function Home() {
       };
       setMessages((prevMessages) => [...prevMessages, assistantMessage]);
     } catch (error) {
-      console.error("Error generating content:", error.message);
+      console.error("Error generating content:");
       const errorMessage = {
         id: Date.now() + 2,
         role: "system",
-        content: `Error: ${error.message}`,
+        content: `Error`,
       };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
     }
