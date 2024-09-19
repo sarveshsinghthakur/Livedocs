@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Message from "@/components/Messges";
@@ -8,7 +8,21 @@ import { Send } from "lucide-react";
 export default function Home() {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+
+  function scrollToBottom() {
+    const chatWindow = chatWindowRef.current;
+    if (chatWindow) {
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+  }
+
+  // Scroll to the bottom on page load and when messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,6 +32,9 @@ export default function Home() {
     const userMessage = { id: Date.now(), role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput("");
+    
+    // Start typing effect for the assistant's response
+    setLoading(true);
 
     try {
       const response = await fetch("/api/chat", {
@@ -38,15 +55,20 @@ export default function Home() {
         role: "assistant",
         content: data, // Expecting the text content to be returned directly from the API
       };
-      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+
+      // Simulate typing effect
+      setTimeout(() => {
+        setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+        setLoading(false);
+      }, 1000); // Adjust the delay as needed
     } catch (error) {
-      
       const errorMessage = {
         id: Date.now() + 2,
         role: "system",
         content: `Error`,
       };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      setLoading(false);
     }
   }
 
@@ -64,10 +86,11 @@ export default function Home() {
   return (
     <main className="fixed h-full w-full bg-muted">
       <div className="container h-full w-full flex flex-col py-8">
-        <div className="flex-1 overflow-y-auto">
+        <div ref={chatWindowRef} className="flex-1 overflow-y-auto chat-window">
           {messages.map((message) => (
             <Message key={message.id} message={message} />
           ))}
+          {loading && <div>Loading...</div>}
         </div>
         <form
           ref={formRef}
