@@ -2,8 +2,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import Message from "@/components/messges";
+
 import { Send } from "lucide-react";
+import Message from "@/components/Messges";
 
 export default function Home() {
   const [messages, setMessages] = useState<any[]>([]);
