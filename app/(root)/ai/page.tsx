@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import Message from "@/components/Messges";
+import Message from "@/components/messges";
 import { Send } from "lucide-react";
 
 export default function Home() {
@@ -19,7 +19,6 @@ export default function Home() {
     }
   }
 
-  // Scroll to the bottom on page load and when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -32,8 +31,7 @@ export default function Home() {
     const userMessage = { id: Date.now(), role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput("");
-    
-    // Start typing effect for the assistant's response
+
     setLoading(true);
 
     try {
@@ -53,14 +51,13 @@ export default function Home() {
       const assistantMessage = {
         id: Date.now() + 1,
         role: "assistant",
-        content: data, // Expecting the text content to be returned directly from the API
+        content: data,
       };
 
-      // Simulate typing effect
       setTimeout(() => {
         setMessages((prevMessages) => [...prevMessages, assistantMessage]);
         setLoading(false);
-      }, 1000); // Adjust the delay as needed
+      }, 1000);
     } catch (error) {
       const errorMessage = {
         id: Date.now() + 2,
@@ -84,31 +81,39 @@ export default function Home() {
   }
 
   return (
-    <main className="fixed h-full w-full bg-muted">
-      <div className="container h-full w-full flex flex-col py-8">
-        <div ref={chatWindowRef} className="flex-1 overflow-y-auto chat-window">
+    <main className="flex h-screen w-full bg-slate-900 justify-center items-center">
+      <div className="container h-full w-full mx-full flex flex-col border border-gray-300 rounded-lg shadow-lg border-gray-900">
+        <h1 className="text-xl font-semibold text-center text-cyan-800 p-4 border-b border-gray-300 border-y-gray-200">
+          Welcome to Gemini Era
+        </h1>
+        <div
+          ref={chatWindowRef}
+          className="flex-1 overflow-y-auto p-4 space-y-4 chat-window text-white"
+        >
           {messages.map((message) => (
             <Message key={message.id} message={message} />
           ))}
-          {loading && <div>Loading...</div>}
+          {loading && <div className="text-white text-center">Loading...</div>}
         </div>
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className="mt-auto relative"
+          className="p-4 border-t border-gray-300 relative flex items-center"
         >
           <Textarea
-            className="w-full text-lg text-black"
-            placeholder="Say something"
+            className="w-full p-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:border-cyan-600 resize-none"
+            placeholder="Say something..."
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
+            rows={1}
+            style={{ minHeight: "50px", maxHeight: "150px", overflow: "auto" }}
           />
           <Button
             type="submit"
             size="icon"
             disabled={!input}
-            className="absolute top-1/2 transform -translate-y-1/2 right-4 rounded-full"
+            className="ml-3 p-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-full"
           >
             <Send size={24} />
           </Button>
